@@ -230,14 +230,14 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     // Separate motion props from HTML button props to avoid conflicts
-    const { 
-      onDrag, 
-      onDragStart, 
-      onDragEnd, 
+    const {
+      onDrag,
+      onDragStart,
+      onDragEnd,
       onAnimationStart,
       onAnimationEnd,
       onAnimationIteration,
-      ...htmlProps 
+      ...htmlProps
     } = props;
 
     return (
