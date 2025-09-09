@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syntellite UI Components Test</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .demo-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            background: #f9fafb;
+        }
+        .demo-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #1f2937;
+        }
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center; color: #1f2937; margin-bottom: 40px;">
+            🚀 Syntellite UI Components Demo
+        </h1>
+        
+        <div class="demo-section">
+            <div class="demo-title">Button Variants</div>
+            <div class="button-grid" id="button-variants"></div>
+        </div>
+
+        <div class="demo-section">
+            <div class="demo-title">Button Sizes</div>
+            <div class="button-grid" id="button-sizes"></div>
+        </div>
+
+        <div class="demo-section">
+            <div class="demo-title">Button Animations</div>
+            <div class="button-grid" id="button-animations"></div>
+        </div>
+
+        <div class="demo-section">
+            <div class="demo-title">Custom Colors</div>
+            <div class="button-grid" id="custom-colors"></div>
+        </div>
+
+        <div class="demo-section">
+            <div class="demo-title">Real-world Examples</div>
+            <div class="button-grid" id="real-world"></div>
+        </div>
+    </div>
+
+    <script type="text/babel">
+        // Mock Syntellite Button Component for demonstration
+        const { useState } = React;
+
+        // Simplified Button component for demo
+        const Button = ({ 
+            variant = 'primary', 
+            size = 'md', 
+            animation = 'hover-lift',
+            primaryColor,
+            gradientFrom,
+            gradientTo,
+            children,
+            fullWidth = false,
+            loading = false,
+            ...props 
+        }) => {
+            const [isHovered, setIsHovered] = useState(false);
+
+            const baseClasses = 'inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed rounded-md';
+            
+            const sizeClasses = {
+                xs: 'px-2 py-1 text-xs h-6',
+                sm: 'px-3 py-1.5 text-sm h-8',
+                md: 'px-4 py-2 text-sm h-10',
+                lg: 'px-6 py-3 text-base h-12',
+                xl: 'px-8 py-4 text-lg h-14',
+            };
+
+            const variantClasses = {
+                primary: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
+                secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500',
+                outline: 'border-2 border-blue-600 text-blue-600 bg-transparent hover:bg-blue-600 hover:text-white focus:ring-blue-500',
+                ghost: 'text-blue-600 bg-transparent hover:bg-blue-50 focus:ring-blue-500',
+                gradient: 'bg-gradient-to-r from-pink-500 to-purple-600 text-white hover:from-pink-600 hover:to-purple-700 focus:ring-pink-500',
+                neon: 'bg-black text-blue-400 border-2 border-blue-400 hover:bg-blue-400 hover:text-black hover:shadow-lg focus:ring-blue-500',
+                glass: 'bg-white bg-opacity-20 backdrop-blur-md text-gray-800 border border-white border-opacity-30 hover:bg-opacity-30 focus:ring-white',
+                bold: 'bg-black text-white hover:bg-gray-800 focus:ring-gray-500 font-bold',
+            };
+
+            const animationStyles = {
+                'hover-lift': isHovered ? { transform: 'translateY(-2px)' } : {},
+                'hover-scale': isHovered ? { transform: 'scale(1.05)' } : {},
+                'glow': isHovered ? { boxShadow: '0 0 20px rgba(59, 130, 246, 0.6)' } : {},
+            };
+
+            let customStyle = {};
+            if (primaryColor) {
+                customStyle.backgroundColor = primaryColor;
+                customStyle.borderColor = primaryColor;
+            }
+            if (gradientFrom && gradientTo) {
+                customStyle.background = `linear-gradient(to right, ${gradientFrom}, ${gradientTo})`;
+            }
+
+            const className = `${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${fullWidth ? 'w-full' : ''}`;
+
+            return (
+                <button
+                    className={className}
+                    style={{ ...animationStyles[animation], ...customStyle }}
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                    disabled={loading}
+                    {...props}
+                >
+                    {loading ? '⏳ Loading...' : children}
+                </button>
+            );
+        };
+
+        // Demo Components
+        const ButtonVariantsDemo = () => (
+            <>
+                <Button variant="primary">Primary</Button>
+                <Button variant="secondary">Secondary</Button>
+                <Button variant="outline">Outline</Button>
+                <Button variant="ghost">Ghost</Button>
+                <Button variant="gradient">Gradient</Button>
+                <Button variant="neon">Neon</Button>
+                <Button variant="glass">Glass</Button>
+                <Button variant="bold">Bold</Button>
+            </>
+        );
+
+        const ButtonSizesDemo = () => (
+            <>
+                <Button size="xs">Extra Small</Button>
+                <Button size="sm">Small</Button>
+                <Button size="md">Medium</Button>
+                <Button size="lg">Large</Button>
+                <Button size="xl">Extra Large</Button>
+            </>
+        );
+
+        const ButtonAnimationsDemo = () => (
+            <>
+                <Button animation="hover-lift">Hover Lift</Button>
+                <Button animation="hover-scale">Hover Scale</Button>
+                <Button animation="glow">Glow Effect</Button>
+                <Button variant="gradient" animation="hover-scale">Animated Gradient</Button>
+            </>
+        );
+
+        const CustomColorsDemo = () => (
+            <>
+                <Button primaryColor="#FF6B6B">Custom Red</Button>
+                <Button primaryColor="#4ECDC4">Custom Teal</Button>
+                <Button primaryColor="#45B7D1">Custom Blue</Button>
+                <Button 
+                    variant="gradient" 
+                    gradientFrom="#FF6B6B" 
+                    gradientTo="#4ECDC4"
+                >
+                    Custom Gradient
+                </Button>
+            </>
+        );
+
+        const RealWorldDemo = () => {
+            const [loading, setLoading] = useState(false);
+            
+            const handleSubmit = () => {
+                setLoading(true);
+                setTimeout(() => setLoading(false), 2000);
+            };
+
+            return (
+                <>
+                    <Button 
+                        variant="gradient" 
+                        gradientFrom="#FF6B6B" 
+                        gradientTo="#FF8E53"
+                        animation="hover-scale"
+                        size="lg"
+                    >
+                        🛒 Add to Cart
+                    </Button>
+                    <Button 
+                        variant="neon"
+                        animation="glow"
+                        primaryColor="#00D4AA"
+                        size="lg"
+                    >
+                        💝 Donate Now
+                    </Button>
+                    <Button 
+                        variant="primary"
+                        loading={loading}
+                        onClick={handleSubmit}
+                        size="lg"
+                    >
+                        📤 Submit Form
+                    </Button>
+                    <Button 
+                        variant="glass"
+                        animation="hover-lift"
+                        size="lg"
+                    >
+                        🚀 Get Started
+                    </Button>
+                </>
+            );
+        };
+
+        // Render all demos
+        ReactDOM.render(<ButtonVariantsDemo />, document.getElementById('button-variants'));
+        ReactDOM.render(<ButtonSizesDemo />, document.getElementById('button-sizes'));
+        ReactDOM.render(<ButtonAnimationsDemo />, document.getElementById('button-animations'));
+        ReactDOM.render(<CustomColorsDemo />, document.getElementById('custom-colors'));
+        ReactDOM.render(<RealWorldDemo />, document.getElementById('real-world'));
+    </script>
+</body>
+</html>
