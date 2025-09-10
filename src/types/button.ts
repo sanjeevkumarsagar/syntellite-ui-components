@@ -10,7 +10,9 @@ export type ButtonVariant =
   | 'neon' 
   | 'glass' 
   | 'minimal' 
-  | 'bold';
+  | 'bold'
+  | 'success'
+  | 'warning';
 
 export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 

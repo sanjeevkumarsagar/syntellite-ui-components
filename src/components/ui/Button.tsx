@@ -44,6 +44,10 @@ const variantStyles = {
     "bg-white/10 backdrop-blur-md text-white border border-white/20 hover:bg-white/20 focus:ring-white/50",
   minimal: "bg-transparent text-gray-700 hover:bg-gray-100 focus:ring-gray-500",
   bold: "bg-black text-white hover:bg-gray-800 focus:ring-gray-500 font-bold",
+  success:
+    "bg-green-500 text-white hover:bg-green-600 focus:ring-green-500",
+  warning:
+    "bg-yellow-500 text-white hover:bg-yellow-600 focus:ring-yellow-500",
 };
 
 // Animation variants for Framer Motion
@@ -130,10 +134,12 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     // Generate dynamic styles based on props
     const dynamicStyles = useMemo(() => {
-      const styles: React.CSSProperties & { [key: string]: any } = { ...style };
+      const styles: React.CSSProperties & { [key: string]: string | number } = {
+        ...style,
+      };
 
       if (primaryColor) {
-        styles["--primary-color"] = primaryColor;
+        styles['--primary-color'] = primaryColor;
       }
       if (secondaryColor) {
         styles["--secondary-color"] = secondaryColor;
@@ -231,12 +237,12 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     // Separate motion props from HTML button props to avoid conflicts
     const {
-      onDrag,
-      onDragStart,
-      onDragEnd,
-      onAnimationStart,
-      onAnimationEnd,
-      onAnimationIteration,
+      onDrag: _onDrag,
+      onDragStart: _onDragStart,
+      onDragEnd: _onDragEnd,
+      onAnimationStart: _onAnimationStart,
+      onAnimationEnd: _onAnimationEnd,
+      onAnimationIteration: _onAnimationIteration,
       ...htmlProps
     } = props;
 
